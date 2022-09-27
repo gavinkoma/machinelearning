@@ -5,12 +5,10 @@ Created on Tue Sep 27 15:59:35 2022
 
 @author: gavinkoma
 """
-#%% start by importing the proper libraries that youll be needing
+# start by importing the proper libraries that youll be needing
 import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
 from collections import Counter
 
 #repeat question 9
@@ -70,6 +68,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.33)
 k = 3
 
 op_labels = knnC(X_train,X_test,y_train,y_test,k)
+
+print(op_labels)
 
 
 
