@@ -37,22 +37,31 @@ def accuracy(y_test,y):
     
 
 def knnC(X_train,X_test,y_train,y_test,k):
+    #create a list for our predicted labels this will hold the vals later
     predicted_labels = []
+    #iterate through X_test each value (we need to calculate the distance)
     for xtest in X_test:
+        #we also need a distance list to append to
         pdis = []
+        #for every xtest value in the total length/range of x_train we are going
+        #to calculate our distance and then append it to our distance list
         for val in range(len(X_train)):
             pdis.append(euclideandistance(xtest,np.array(X_train[val,:])))
 
+        #sort through the dist values and slice them according to our 
+        #variable k number
         dist = np.argsort(np.array(pdis))[:k]
         
         labels = y_train[dist]
         
+        #take the majority vote
         lab = mode(labels)
         lab = lab.mode[0]
         predicted_labels.append(lab)
    
     return predicted_labels
 
+#run the function like question 9 for varying k numbers
 for val in k_vals:
     y_pred = knnC(X_train,X_test,y_train,y_test,val)
     acc = accuracy(y_test,y_pred)
