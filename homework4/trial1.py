@@ -7,7 +7,7 @@ Created on Thu Oct 13 11:47:31 2022
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
+
 
 #%% question 1
 #f(x) = 3x1^2 + 2x2^2 + 4x1x2 - 5x1 + 6
