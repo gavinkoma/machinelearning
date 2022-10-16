@@ -48,6 +48,8 @@ combined.columns=header
 # income_df
 le = LabelEncoder()
 combined.income = le.fit_transform(combined.income)
+#combined.income = combined.income.apply(lambda x: 1 if x == " <=50K" else 0)
+
 
 #data is entered and combined so life is good rn 
 h = 0.02
@@ -97,43 +99,10 @@ hour_income = pd.DataFrame().assign(hour=combined['hours-per-week'], income=comb
 
 datasets = [educa_income,gain_income,loss_income,hour_income]
 
-
-figure = plt.figure(figsize = (30,10))
-
-i = 1
-
-for ds_cnt, ds in enumerate(datasets):
-    # preprocess dataset, split into training and test part
-    X, y = ds
-    X = StandardScaler().fit_transform(X)
-    X_train, X_test, y_train, y_test = \
-        train_test_split(X, y, test_size=.4, random_state=42)
-
-    x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
-    y_min, y_max = X[:, 1].min() - .5, X[:, 1].max() + .5
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
-
-    # just plot the dataset first
-    cm = plt.cm.RdBu
-    cm_bright = ListedColormap(['#FF0000', '#0000FF'])
-    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-    if ds_cnt == 0:
-        ax.set_title("Input data")
-    # Plot the training points
-    ax.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright)
-    # and testing points
-    ax.scatter(X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6)
-    ax.set_xlim(xx.min(), xx.max())
-    ax.set_ylim(yy.min(), yy.max())
-    ax.set_xticks(())
-    ax.set_yticks(())
-    i += 1
-
-
-
-
-
+educa_income.boxplot(by='income',column = ['education'])
+gain_income.boxplot(by='income',column=['gain'])
+loss_income.boxplot(by='income',column=['loss'])
+hour_income.boxplot(by='income',column=['hour'])
 
 
 
