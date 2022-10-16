@@ -8,59 +8,65 @@ Created on Thu Oct 13 11:47:31 2022
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-#%% question 1
-#f(x) = 3x1^2 + 2x2^2 + 4x1x2 - 5x1 + 6
-# derive analytically the values of x* that could satisfy the gradient
-# okay so probably we want to take the partial derivation first
-# maybe we start by defining our function
-
-#f_x = 2*x_1**2 + 2*x_2**2 + 4*x_1*x_2 - 5*x_1 + 6
-#f_xx = 10*x_1 + 8*x_2 - 5
-
-def derivative_x1(x1,x2):
+#%%
+#question 1
+#begin by defining our two partials
+def derivativex1(x1,x2):
     return 6*x1+4*x2-5
 
-def derivative_x2(x1,x2):
+def derivativex2(x1,x2):
     return 4*x2+4*x1
 
-def gd_hw3_1(x0,alpha,iter):
-    evolution = list()
-    loss = list()
-    for i in range(iter):
-        evolution.append([x0[0],x0[1]])
-        prev_x0_1 = x0[0]
-        prev_x0_2 = x0[1]
-        x0[0]= x0[0] - alpha * derivative_x1(prev_x0_1,prev_x0_2)
-        x0[1]= x0[1] - alpha * derivative_x2(prev_x0_1,prev_x0_2)
-        prev = 3*prev_x0_1**2 + 2*prev_x0_2**2 + 4*prev_x0_1*prev_x0_2
-        diff = abs(prev - (3*x0[0]**2 + 2*x0[1]**2 + 4*x0[0]*x0[1] - 5*x0[0] + 6))
-        loss.append(diff)
+alpha = [0.00001,0.0001,0.001,0.01,0.1] #define our values for alpha
+
+def gradient(x0,alpha,iter):
+    evolutionx = [] #list to append our evolution of x value
+    lossval = [] #list to append our loss value
+    
+    for zeus in range(iter):
+        evolutionx.append([x0[0],x0[1]])
+        prev_x0_1 = x0[0] #define the previous variables
+        prev_x0_2 = x0[1] #define the previous variable again (x_2)
+        x0[0]= x0[0] - alpha * derivativex1(prev_x0_1,prev_x0_2) #our new value is simga - alpha*previous rate in equation 1
+        x0[1]= x0[1] - alpha * derivativex2(prev_x0_1,prev_x0_2) #the next value is defined by the same equation but for x[1] not x[0]
+        #we have to make two separate equations because if we dont then we cant calculate the partials, we would be calculating the gradiend
         
+        #prev is the original untouched equation athat we want to pass our x1, x2 values to
+        prev = 3*prev_x0_1**2 + 2*prev_x0_2**2 + 4*prev_x0_1*prev_x0_2 - 5*prev_x0_1 + 6
+        diff = abs(prev - (3*x0[0]**2 + 2*x0[1]**2 + 4*x0[0]*x0[1] - 5*x0[0] + 6)) #difference calculates the differences 
+        #between our x_0 & x_1 as they are updated through our functions
+        #the difference between these values defines our loss
+        lossval.append(diff)
+        
+           
+        #the degree to which we should calculate loss (4 decimals), could be smaller 
         if diff < 0.0001:
-            return evolution, loss
-        
-    return evolution, loss
+            return evolutionx, lossval           
+    #return values
+    return evolutionx, lossval     
 
-
+#set up a list for our iteration values 
+#we cannot run larger than 0.1 because if results in matrices that are too large 
+#to process, spoke with Dr. Vucetic about it, he is okay with stopping at 0.1
 alpha = [0.00001, 0.0001, 0.001, 0.01, 0.1]
-res = dict()
-loss = dict()
 
+#define a place to store results and loss
+res = {}
+loss = {}
+
+#loop through our functions start at index 0, first alpha iteration and 1000 iters
 for a in alpha:
-    xfinal, loss_final = gd_hw3_1([0,0],a,1000)
+    xfinal, loss_final = gradient([0,0],a,1000)
+    #res[alpha iteration] = final
     res[a] = xfinal
+    #loss[alpha iteration]=loss 
     loss[a] = loss_final
 
-
+#plot our graphs to get a view of how our gradient descent looks:
 for i in res:
     xs = [x[0] for x in res[i]]
     ys = [x[1] for x in res[i]]
     plt.plot(xs,ys)
-
-
-
-
 
 
 #%% ## question 2
@@ -115,8 +121,6 @@ for val in cur_x:
        gradient(val, a_val, max_iters)
     
     
-
-
 #%% question 3
 
 import numpy as np

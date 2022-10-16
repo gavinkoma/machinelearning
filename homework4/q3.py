@@ -46,9 +46,9 @@ combined.columns=header
 
 # income_df['Income_Types_Cat'] = income_df['income'].cat.codes
 # income_df
-le = LabelEncoder()
-combined.income = le.fit_transform(combined.income)
-#combined.income = combined.income.apply(lambda x: 1 if x == " <=50K" else 0)
+#le = LabelEncoder()
+#combined.income = le.fit_transform(combined.income)
+combined.income = combined.income.apply(lambda x: 1 if x == " <=50K" else 0)
 
 
 #data is entered and combined so life is good rn 
