@@ -105,3 +105,18 @@ def show_results(model):
 build_model(num_conv = 3, num_dense = 2)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
