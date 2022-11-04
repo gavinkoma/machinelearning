@@ -15,6 +15,7 @@ from keras.layers.pooling import MaxPooling2D
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 #load your data
 (X_train, Y_train), (X_test, Y_test) = cifar10.load_data()
 X_test_orig = X_test
@@ -24,7 +25,7 @@ shape_ord = (img_rows,img_cols,3)
 
 
 #from step 0, just going to keep using these for now
-nb_epoch = 5
+nb_epoch = 10
 batch_size = 64
 nb_filters = 32
 nb_pool = 2
@@ -97,28 +98,7 @@ def build_model(num_conv = 1, conv_activation = "relu", num_dense = 1, dense_act
     return
 
         
-build_model(num_conv=3, num_dense=2)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-              
-              
-              
-              
-              
-              
-              
+build_model(num_conv=3, num_dense=2)  
+
+
               

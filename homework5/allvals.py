@@ -22,19 +22,19 @@ nb_filters = 32
 nb_pool = 2
 nb_conv = 3
 
-
+#load and separate your data
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 X_test_orig = X_test
 img_rows, img_cols = 28, 28
 shape_ord = (img_rows,img_cols,1)
 
-#normalization
+#normalization, follow the example for this
 X_train = X_train[:20000]
 Y_train = y_train[:20000]
 
+#i randomized this data
 idx = np.random.permutation(len(X_train))
 X_train,Y_train = X_train[idx],Y_train[idx]
-
 X_train = X_train.reshape((X_train.shape[0],) + shape_ord)
 X_test = X_test.reshape((X_test.shape[0],) + shape_ord)
 X_train = X_train.astype('float32')
@@ -50,9 +50,7 @@ nb_classes = 10
 # Function for constructing the convolution neural network
 # Feel free to add parameters, if you want
 
-def build_model(num_conv = 1, conv_activation = "relu", num_dense = 1, dense_activation  = "relu", 
-               dropout = True, max_pooling = True):
-    """"""
+def build_model(num_conv = 1, conv_activation = "relu", num_dense = 1, dense_activation  = "relu", dropout = True, max_pooling = True):
     model = Sequential()
     model.add(Conv2D(nb_filters, (nb_conv, nb_conv), padding='valid', input_shape=shape_ord))
     model.add(Activation(conv_activation))

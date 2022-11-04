@@ -1,0 +1,8 @@
+Shapiro Test for 1 die: ShapiroResult(statistic=0.8906841278076172, pvalue=5.289419391374395e-07)
+
+Shapiro Test for 2 die: ShapiroResult(statistic=0.9709164500236511, pvalue=0.0259915292263031)
+
+Shapiro Test for 3 die: ShapiroResult(statistic=0.9831643104553223, pvalue=0.23252668976783752)
+
+Shapiro Test for 4 die: ShapiroResult(statistic=0.9734591245651245, pvalue=0.04090116173028946)
+
