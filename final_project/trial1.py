@@ -70,17 +70,15 @@ alltweets['cleaned_tweets'] = alltweets['uncleaned'].apply(cleantwt)
 #but also some tweets were just emoji and retweets so we need to remove the blanks
 alltweets.drop(alltweets[alltweets['cleaned_tweets'] == ''].index,inplace = True)
 
+cleantweets = alltweets['cleaned_tweets']
+
 #lets make it a text file? 
 with open('tweet.txt','w') as f:
-    alltweets_string = alltweets.to_string(header=False,
-                                            index = False)
-    f.write(alltweets_string)
+    pd.options.display.max_colwidth = 300 #character limit of twitter
+    cleantweets_string = cleantweets.to_string(header=None,
+                                            index = None)
+    f.write(cleantweets_string)
 
-tweets = '/Users/gavinkoma/Desktop/machinelearning/final_project/tweet.txt'
-with io.open(tweets,encoding='utf-8') as f:
-    text = f.read().lower()
-print('corpus length:',len(text))
-
-#okay so data is cleaned for now, i think now we can start with modeling?
+#okay so now we should start modeling the RNN
 
 
