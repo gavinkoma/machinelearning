@@ -15,55 +15,72 @@ from tensorflow.keras.optimizers import RMSprop
 from keras.utils.data_utils import get_file
 import numpy as np
 import random
+import re
 import sys
 import io
 import pandas as pd
 
+#okay start by downloading data and reading through it
+start = pd.read_csv('TweetsElonMusk2010_2021.csv')
+new = pd.read_csv('rawdata2022.csv')
 
-#only need to run once, dont need to perform this again.
-def datainit():
-    #okay start by downloading data and reading through it
-    start = pd.read_csv('TweetsElonMusk2010_2021.csv')
-    new = pd.read_csv('rawdata2022.csv')
+tweets2010_2021 = start['tweet']
+tweets2022 = new['Tweets']
+
+#append the data to one list
+alltweets = pd.DataFrame(tweets2010_2021.append(tweets2022, 
+                                                ignore_index = True))
+
+alltweets.columns = ['uncleaned']
+
+alltweets.astype(str)
+
+def cleantwt(twt):
+    emoj = re.compile("["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        u"\U00002500-\U00002BEF"  # chinese char
+        u"\U00002702-\U000027B0"
+        u"\U000024C2-\U0001F251"
+        u"\U0001f926-\U0001f937"
+        u"\U00010000-\U0010ffff"
+        u"\u2640-\u2642" 
+        u"\u2600-\u2B55"
+        u"\u200d"
+        u"\u23cf"
+        u"\u23e9"
+        u"\u231a"
+        u"\ufe0f"  # dingbats
+        u"\u3030"
+            "]+", re.UNICODE)
     
-    tweets2010_2021 = start['tweet']
-    tweets2022 = new['Tweets']
-    
-    #append the data to one list
-    alltweets = pd.DataFrame(tweets2010_2021.append(tweets2022, 
-                                                    ignore_index = True))
-    
-    #lets make it a text file? 
-    with open('tweet.txt','a') as f:
-        alltweets_string = alltweets.to_string(header=False,
-                                               index = False)
-        f.write(alltweets_string)
-        
-    return
+    twt = re.sub('RT', '', twt) # remove 'RT' from tweets
+    twt = re.sub('#[A-Za-z0-9]+', '', twt) # remove the '#' from the tweets
+    twt = re.sub('\\n', '', twt) # remove the '\n' character
+    twt = re.sub('https?:\/\/\S+', '', twt) # remove the hyperlinks
+    twt = re.sub('@[\S]*', '', twt) # remove @mentions
+    twt = re.sub('^[\s]+|[\s]+$', '', twt) # remove leading and trailing whitespaces
+    twt = re.sub(emoj, '', twt) # remove emojis
+    return twt
 
+alltweets['cleaned_tweets'] = alltweets['uncleaned'].apply(cleantwt)
 
-#okay we need to clean the tweets now though so they dont have @ or emojis
-def clean():
-    tweets = '/Users/gavinkoma/Desktop/machinelearning/final_project/tweet.txt'
-    with io.open(tweets,encoding='utf-8') as f:
-        text = f.read().lower()
-    print('corpus length:',len(text))
-    
-    #we should remove the @ parts as well but im not 100% sure how
-    list = text.find_all('\n[\w* *]*: ', text)
-        
-    chars = sorted(list(set(text)))
-    char_indices = dict((c,i) for i,c in enumerate(chars))
-    indices_char = dict((i,c) for i,c in enumerate(chars))
-    
-    print('Unique Chars:', len(chars))
-    return char_indices, indices_char
+#but also some tweets were just emoji and retweets so we need to remove the blanks
+alltweets.drop(alltweets[alltweets['cleaned_tweets'] == ''].index,inplace = True)
 
-def main():
-    #datainit()
-    clean()
+#lets make it a text file? 
+with open('tweet.txt','w') as f:
+    alltweets_string = alltweets.to_string(header=False,
+                                            index = False)
+    f.write(alltweets_string)
 
-main()
+tweets = '/Users/gavinkoma/Desktop/machinelearning/final_project/tweet.txt'
+with io.open(tweets,encoding='utf-8') as f:
+    text = f.read().lower()
+print('corpus length:',len(text))
 
+#okay so data is cleaned for now, i think now we can start with modeling?
 
 
