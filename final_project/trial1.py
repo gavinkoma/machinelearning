@@ -133,8 +133,13 @@ def on_epoch_end(epoch, logs):
     # Function invoked at end of each epoch. Prints generated text.
     print()
     print('----- Generating text after Epoch: %d' % (epoch+1))
-
+    
     start_index = random.randint(0, len(cleantweets_string) - maxlen - 1)
+    text_shuffled = cleantweets_string.split(",")
+    random.shuffle(text_shuffled)
+    text_shuffled = ','.join(map(str,text_shuffled))
+    start_index = random.randint(0, len(text_shuffled) - maxlen - 1)
+    
     for diversity in [0.2, 0.4, 0.5, 1.0]:
         print('----- diversity:', diversity)
 
